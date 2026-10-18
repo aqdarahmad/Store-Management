@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using StoreManagment.Data;
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +11,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+
+string connectionString = "Server=(localdb)\\MSSQLLocalDB; Database=store-management;Trusted_Connection=True; MultipleActiveResultSets=True;TrustServerCertificate=True;";
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
