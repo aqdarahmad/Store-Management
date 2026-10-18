@@ -7,8 +7,13 @@ namespace StoreManagment.Models
     {
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
+
+        [Required]
         public string Name { get; set; } = string.Empty;
 
+
+        [Required]
+        [Range(100,1000)]
         public int Price { get; set; }
 
 

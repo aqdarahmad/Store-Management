@@ -18,15 +18,51 @@ public class ProductController : ControllerBase
 
     [HttpGet]
 
-    public IActionResult GetAllProduct()
+    public IActionResult GetAllProduct( [FromQuery] string? name , [FromQuery] decimal? minprice, [FromQuery] decimal? maxprice, [FromQuery] Guid? categoryId , [FromQuery] int pagenumber = 1, [FromQuery] int pagesize = 10 )
+
     {
-        var products = _context.Products.Select(
+        if (pagenumber < 1 || pagesize < 1 || pagesize > 50)
+            return BadRequest("Invalid pagenumber or pagesize");
+
+
+        if (minprice.HasValue && maxprice.HasValue && minprice.Value > maxprice.Value)
+            return BadRequest("Min price can not exceed max price");
+
+
+        if(maxprice < 0 || minprice < 0)
+            return BadRequest("Price can't be negative");
+
+
+
+
+        var query = _context.Products.OrderBy(p => p.Name).AsQueryable();
+        // filter by product name 
+        if(!string.IsNullOrWhiteSpace(name))
+        {
+            query = query.Where(p => p.Name.Contains(name));
+        }
+
+        if(minprice.HasValue)
+        {
+            query = query.Where(p => p.Price >= minprice.Value);
+        }
+
+        if (maxprice.HasValue)
+        {
+            query = query.Where(p => p.Price <= maxprice.Value);
+        }
+        if(categoryId.HasValue)
+        {
+            query=query.Where(p=>p.CategoryId== categoryId.Value);
+        }
+        var products = query.Skip((pagenumber-1)*pagesize).Take(pagesize).Select(
             p => new  ProductResponseDto 
             {
                 Id= p.Id,
                 Name= p.Name,
                 CategoryId= p.CategoryId,
-                CategoryName=p.Category.Name
+                CategoryName=p.Category.Name,
+                Price= p.Price,
             }
             ).ToList();
         return Ok(products);

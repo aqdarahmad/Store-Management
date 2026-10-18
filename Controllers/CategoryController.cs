@@ -18,9 +18,20 @@ public class CategoryController : ControllerBase
     }
     [HttpGet]
 
-    public IActionResult GetAllCategories()
+    public IActionResult GetAllCategories( [FromQuery] string?name, [FromQuery] int pagenumber = 1, [FromQuery] int pagesize = 10)
     {
-        var category = _context.Categories.Select(
+        if (pagenumber < 1 || pagesize < 1 || pagesize > 50)
+            return BadRequest("Invalid page number ");
+
+        var query = _context.Categories.OrderBy(p => p.Name).AsQueryable();
+
+
+        if(!string.IsNullOrWhiteSpace(name))
+        {
+            query = query.Where(p => p.Name.Contains(name));
+        }
+
+        var category = query.Skip((pagenumber-1)*pagesize).Take(pagesize).Select(
             p => new CategoryResponseDto
             {
                 Name = p.Name,
