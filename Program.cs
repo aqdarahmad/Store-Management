@@ -45,8 +45,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Database
-//string connectionString =
-//  "Server=(localdb)\\MSSQLLocalDB;Database=store-management;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;";
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
@@ -176,11 +175,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 // HTTP pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 
