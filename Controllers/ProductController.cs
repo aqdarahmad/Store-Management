@@ -2,6 +2,7 @@
 using StoreManagment.Data;
 using StoreManagment.Models;
 using StoreManagment.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StoreManagment.Controllers;
 
@@ -15,7 +16,7 @@ public class ProductController : ControllerBase
     {
         _context = context;
     }
-
+    [Authorize]
     [HttpGet]
 
     public IActionResult GetAllProduct( [FromQuery] string? name , [FromQuery] decimal? minprice, [FromQuery] decimal? maxprice, [FromQuery] Guid? categoryId , [FromQuery] int pagenumber = 1, [FromQuery] int pagesize = 10 )
@@ -68,7 +69,7 @@ public class ProductController : ControllerBase
         return Ok(products);
 
     }
-
+    [Authorize]
     [HttpGet("{id:guid}")]
 
     public IActionResult GetProduct([FromRoute] Guid id) {
@@ -90,7 +91,7 @@ public class ProductController : ControllerBase
 
 
     }
-
+    [Authorize(Roles ="Admin")]
     [HttpPost]
 
     public IActionResult AddNewProduct([FromBody] ProductRequestDto request)
@@ -127,6 +128,7 @@ new ProductResponseDto
 
         return Created();
     }
+    [Authorize(Roles = "Admin")]
 
     [HttpDelete("{id:guid}")]
 
@@ -142,7 +144,7 @@ new ProductResponseDto
 
         return NoContent();
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
 
     public IActionResult UpdateProduct([FromRoute] Guid id, [FromBody] ProductRequestDto request  )

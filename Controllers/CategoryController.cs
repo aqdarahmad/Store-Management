@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StoreManagment.Data;
 using StoreManagment.DTO;
@@ -16,6 +17,7 @@ public class CategoryController : ControllerBase
     {
         _context = context;
     }
+    [Authorize]
     [HttpGet]
 
     public IActionResult GetAllCategories( [FromQuery] string?name, [FromQuery] int pagenumber = 1, [FromQuery] int pagesize = 10)
@@ -44,7 +46,7 @@ public class CategoryController : ControllerBase
     }
 
 
-
+    [Authorize]
     [HttpGet("{id:guid}")]
 
     public IActionResult GetCategory([FromRoute] Guid id)
@@ -65,7 +67,7 @@ public class CategoryController : ControllerBase
 
 
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public IActionResult AddNewCategory([FromBody] CategoryRequestDto request)
     {
@@ -87,7 +89,7 @@ public class CategoryController : ControllerBase
         // return Created();
 
     }
-
+    [Authorize(Roles = "Admin")]
 
     [HttpDelete("{id:guid}")]
 
@@ -104,7 +106,7 @@ public class CategoryController : ControllerBase
         return NoContent();
     }
 
-
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
 
     public IActionResult UpdateCategory([FromRoute] Guid id, [FromBody] CategoryRequestDto request)
