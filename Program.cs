@@ -45,11 +45,24 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // Database
-string connectionString =
-    "Server=(localdb)\\MSSQLLocalDB;Database=store-management;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;";
+//string connectionString =
+//  "Server=(localdb)\\MSSQLLocalDB;Database=store-management;Trusted_Connection=True;MultipleActiveResultSets=True;TrustServerCertificate=True;";
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+
+
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "Database connection string is missing.");
+}
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseNpgsql(connectionString));
+
+
+
 
 // Identity
 builder.Services
@@ -65,7 +78,8 @@ string issuer = "StoreManagment";
 string audience = "StoreManagmentClient";
 
 
-string jwtKey = "MySuperSecretKey_StoreManagement_2026_123456";
+string jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("JWT key is missing.");
 
 // Authentication
 builder.Services
