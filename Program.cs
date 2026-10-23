@@ -176,7 +176,11 @@ using (var scope = app.Services.CreateScope())
 
 // HTTP pipeline
 
-
+app.MapGet("/", () => Results.Ok(new
+{
+    message = "Store Management API is running",
+    swagger = "/swagger"
+}));
 app.UseSwagger();
 app.UseSwaggerUI();
 
