@@ -17,6 +17,12 @@ Store Management API is a backend project designed to organize and manage store 
 
 The project uses Entity Framework Core for database access, ASP.NET Core Identity for user management, and JWT for authentication and role-based authorization.
 
+## 🚀 Live Demo
+
+- **Swagger UI:** [Explore Store Management API](https://store-management-1-7wrw.onrender.com/swagger/index.html)
+- **API Base URL:** https://store-management-1-7wrw.onrender.com
+
+
 ## ✨ Features
 
 * **User Authentication:** Register and log in to the application.
