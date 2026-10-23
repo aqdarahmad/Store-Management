@@ -66,8 +66,8 @@ namespace StoreManagment.Controllers;
 
 
 
-        string issuer = "StoreManagment";
-        string audience = "StoreManagmentClient";
+        string issuer = _configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("Issuer key is missing."); 
+        string audience = _configuration["Jwt:Audience"] ?? throw new InvalidOperationException("Aude key is missing."); ;
         string jwtKey = _configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("JWT Key is missing.");
 

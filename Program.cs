@@ -73,8 +73,8 @@ builder.Services
     .AddDefaultTokenProviders();
 
 // JWT settings
-string issuer = "StoreManagment";
-string audience = "StoreManagmentClient";
+string issuer = builder.Configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("Issuer key is missing.");
+string audience = builder.Configuration["Jwt:Audience"] ?? throw new InvalidOperationException("Aude key is missing.");
 
 
 string jwtKey = builder.Configuration["Jwt:Key"]
