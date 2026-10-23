@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StoreManagment.Data;
 using StoreManagment.DTO;
 using StoreManagment.Models;
@@ -20,7 +21,7 @@ public class CategoryController : ControllerBase
     [Authorize]
     [HttpGet]
 
-    public IActionResult GetAllCategories( [FromQuery] string?name, [FromQuery] int pagenumber = 1, [FromQuery] int pagesize = 10)
+    public async Task<IActionResult> GetAllCategories( [FromQuery] string?name, [FromQuery] int pagenumber = 1, [FromQuery] int pagesize = 10)
     {
         if (pagenumber < 1 || pagesize < 1 || pagesize > 50)
             return BadRequest("Invalid page number ");
@@ -33,14 +34,14 @@ public class CategoryController : ControllerBase
             query = query.Where(p => p.Name.Contains(name));
         }
 
-        var category = query.Skip((pagenumber-1)*pagesize).Take(pagesize).Select(
+        var category = await query.Skip((pagenumber-1)*pagesize).Take(pagesize).Select(
             p => new CategoryResponseDto
             {
                 Name = p.Name,
                 Id = p.Id,
             }
 
-            ).ToList();
+            ).ToListAsync();
 
         return Ok(category);
     }
