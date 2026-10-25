@@ -125,7 +125,7 @@ When the application is running, open the Swagger URL printed in the terminal.
 
 For the deployed application, use:
 
-[https://store-management-tiej.onrender.com/swagger/index.html](https://store-management-tiej.onrender.com/swagger/index.html)
+[https://store-management-1-7wrw.onrender.com/swagger/index.html](https://store-management-1-7wrw.onrender.com/swagger/index.html)
 
 ## 📡 API Endpoints
 
